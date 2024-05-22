@@ -1,19 +1,19 @@
 package org.bolyuk.joghurt.compiler;
 
 import org.bolyuk.joghurt.C;
-import org.bolyuk.joghurt.obj.JObject;
-import org.bolyuk.joghurt.obj.JStatement;
+import org.bolyuk.joghurt.interpreter.obj.JObject;
+import org.bolyuk.joghurt.interpreter.obj.JStatement;
 
 import java.util.ArrayList;
 
-public class JTree {
+public class JTokenTree {
     private ArrayList<JStatement> stack = new ArrayList<>(); //contains layers of tree
     private int deep = 1; // deep value in tree
 
     private JStatement root = new JStatement(); //well, result statement or "root"
     private JStatement current_layer = new JStatement(); //current layer of adding code statements
 
-    public JTree(){
+    public JTokenTree(){
         stack.add(root); //initialize root as a first layer in a stack
         root.put(current_layer);
         stack.add(current_layer);
@@ -22,20 +22,11 @@ public class JTree {
     public JStatement create(JStatement tokens){
         for (JObject o : tokens.data) {
             if (o.value.equals(";")) {
-                // if statement is complete,
-                //just recreate "current_layer" as a new element of root from the last "current_layer"
-                current_layer = new JStatement();
-                stack.get(deep-1).put(current_layer);
-                //and dont forget to update a position
-                stack.set(deep, current_layer);
+                resolve_complete();
             } else if (o.value.equals(",")) {
                 JStatement current_root = stack.get(deep-1);
                 if(current_root.value != null && current_root.value.equals("buffer_layer")){
-                    //using method from up
-                    current_layer = new JStatement();
-                    stack.get(deep-1).put(current_layer);
-                    //and dont forget to update a position
-                    stack.set(deep, current_layer);
+                    resolve_complete();
                 } else {
                     //shitty coded method to add buffer layer and put old statement with new one to one layer above the root
 
@@ -72,6 +63,15 @@ public class JTree {
             }
         }
         return root;
+    }
+
+    private void resolve_complete(){
+        // if statement is complete,
+        //just recreate "current_layer" as a new element of root from the last "current_layer"
+        current_layer = new JStatement();
+        stack.get(deep-1).put(current_layer);
+        //and dont forget to update a position
+        stack.set(deep, current_layer);
     }
 
     private void down() {

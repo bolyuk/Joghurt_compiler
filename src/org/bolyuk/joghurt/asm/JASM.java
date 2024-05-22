@@ -1,7 +1,7 @@
 package org.bolyuk.joghurt.asm;
 
-import org.bolyuk.joghurt.obj.JObject;
-import org.bolyuk.joghurt.obj.JStatement;
+import org.bolyuk.joghurt.interpreter.obj.JObject;
+import org.bolyuk.joghurt.interpreter.obj.JStatement;
 
 public class JASM {
     public static void generate(JStatement code_tree){

@@ -1,7 +1,7 @@
 package org.bolyuk.joghurt.utils;
 
-import org.bolyuk.joghurt.obj.JObject;
-import org.bolyuk.joghurt.obj.JStatement;
+import org.bolyuk.joghurt.interpreter.obj.JObject;
+import org.bolyuk.joghurt.interpreter.obj.JStatement;
 
 public class JVisualizer {
     public static String visualize(JStatement statement){
